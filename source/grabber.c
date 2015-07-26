@@ -16,8 +16,6 @@ grabber_t *grabber_create(HWND window) {
 	
 	self->width = rect.right-rect.left;
 	self->height = rect.bottom-rect.top;
-
-	printf("window coords: %d %d %d %d\n", rect.left, rect.top, rect.right, rect.bottom);
 	
 	self->windowDC = GetDC(window);
 	self->memoryDC = CreateCompatibleDC(self->windowDC);
