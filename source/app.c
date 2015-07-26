@@ -191,16 +191,6 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 }
 
 void app_run(app_t *self) {
-	
-	printf(
-		"Window 0x%08x, %dx%d -> %dx%d, bit rate: %d kb/s\n"
-		"Server started on: http://%s:%d/\n\n",
-		self->grabber->window, self->grabber->width, self->grabber->height, 
-		self->encoder->out_width, self->encoder->out_height,
-		self->encoder->context->bit_rate / 1000,
-		server_get_host_address(self->server), self->server->port
-	);
-	
 	jsmpeg_frame_t *frame = (jsmpeg_frame_t *)malloc(APP_FRAME_BUFFER_SIZE);
 	frame->type = jsmpeg_frame_type_video;
 	frame->size = 0;

@@ -76,7 +76,6 @@ int main(int argc, char* argv[]) {
 
 	// Find target window
 	char *window_title = argv[argc-1];
-
 	HWND window = NULL;
 	if( strcmp(window_title, "desktop") == 0 ) {
 		window = GetDesktopWindow();
@@ -95,8 +94,22 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	// Run
+	// Start the app
 	app_t *app = app_create(window, port, bit_rate, fps, width, height);
+
+	char real_window_title[56];
+	GetWindowTextA(window, real_window_title, sizeof(real_window_title));
+	printf(
+		"Window 0x%08x: \"%s\"\n"
+		"Window size: %dx%d, output size: %dx%d, bit rate: %d kb/s\n\n"
+		"Server started on: http://%s:%d/\n\n",
+		window, real_window_title,
+		app->grabber->width, app->grabber->height,
+		app->encoder->out_width, app->encoder->out_height,
+		app->encoder->context->bit_rate / 1000,
+		server_get_host_address(app->server), app->server->port
+	);
+
 	app_run(app);
 	app_destroy(app);	
 
