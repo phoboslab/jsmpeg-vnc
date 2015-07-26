@@ -153,7 +153,7 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 				break;
 		}
 
-		//printf("key: %d -> %d\n", key_code, scan_code);
+		//printf("key: %d -> %d\n", input->key_code, scan_code);
 		keybd_event((BYTE)input->key_code, scan_code, flags, 0);
 	}
 	else if( type & input_type_mouse && len >= sizeof(input_mouse_t) ) {
@@ -170,7 +170,7 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 			int x = (int)(input->x * scale_x + window_pos.x),
 				y = (int)(input->y * scale_y + window_pos.y);
 
-			//printf("mouse absolute %f, %f\n", x, y);
+			//printf("mouse absolute %d, %d\n", x, y);
 			SetCursorPos(x, y);
 		}
 
@@ -178,12 +178,12 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 			int x = (int)(input->x * self->mouse_speed),
 				y = (int)(input->y * self->mouse_speed);
 
-			//printf("mouse relative %f, %f\n", x, y);
+			//printf("mouse relative %d, %d\n", x, y);
 			mouse_event(MOUSEEVENTF_MOVE, x, y, 0, NULL);
 		}
 
 		if( type & input_type_mouse_button ) {
-			//printf("mouse button %d\n", u16data[1]);
+			//printf("mouse button %d\n", input->flags);
 			mouse_event(input->flags, 0, 0, 0, NULL);
 		}
 	}
