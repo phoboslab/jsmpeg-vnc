@@ -67,7 +67,7 @@ void on_close(server_t *server, libwebsocket *socket) { app_on_close((app_t *)se
 
 
 
-app_t *app_create(HWND window, int port, int bit_rate, int fps, int out_width, int out_height) {
+app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height) {
 	app_t *self = (app_t *)malloc(sizeof(app_t));
 	memset(self, 0, sizeof(app_t));
 
@@ -77,7 +77,6 @@ app_t *app_create(HWND window, int port, int bit_rate, int fps, int out_width, i
 	if( !out_width ) { out_width = self->grabber->width; }
 	if( !out_height ) { out_height = self->grabber->height; }
 	if( !bit_rate ) { bit_rate = out_width * 1500; } // estimate bit rate based on output size
-	self->target_fps = fps ? fps : 60;
 
 	self->encoder = encoder_create(
 		self->grabber->width, self->grabber->height, // in size
@@ -190,14 +189,14 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 	}
 }
 
-void app_run(app_t *self) {
+void app_run(app_t *self, int target_fps) {
 	jsmpeg_frame_t *frame = (jsmpeg_frame_t *)malloc(APP_FRAME_BUFFER_SIZE);
 	frame->type = jsmpeg_frame_type_video;
 	frame->size = 0;
 
 	double
 		fps = 60.0f,
-		wait_time = (1000.0f/self->target_fps) - 1.5f;
+		wait_time = (1000.0f/target_fps) - 1.5f;
 
 	timer_t *frame_timer = timer_create();
 

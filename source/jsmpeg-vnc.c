@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Start the app
-	app_t *app = app_create(window, port, bit_rate, fps, width, height);
+	app_t *app = app_create(window, port, bit_rate, width, height);
 
 	char real_window_title[56];
 	GetWindowTextA(window, real_window_title, sizeof(real_window_title));
@@ -110,7 +110,8 @@ int main(int argc, char* argv[]) {
 		server_get_host_address(app->server), app->server->port
 	);
 
-	app_run(app);
+	app_run(app, fps);
+
 	app_destroy(app);	
 
 	return 0;
