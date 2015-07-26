@@ -21,7 +21,7 @@ if( mouseLock ) {
 		(function(){});
 }
 
-// input_type_t
+// enum input_type_t
 var INPUT_KEY = 0x0001,
 	INPUT_MOUSE_BUTTON = 0x0002,
 	INPUT_MOUSE_ABSOLUTE = 0x0004,
@@ -52,14 +52,14 @@ var sendMouse = function(ev, action) {
 	if( action ) {
 		type |= INPUT_MOUSE_BUTTON;
 		
-		// attempt to lock pointer for mouse1 down
+		// Attempt to lock pointer at mouse1 down
 		if( mouseLock && action === MOUSE_1_DOWN ) {
 			canvas.requestPointerLock();
 		}
 	}
 	
 	// Only make relative mouse movements if no button is pressed
-	else if( mouseLock ) {
+	if( !action && mouseLock ) {
 		type |= INPUT_MOUSE_RELATIVE;
 		
 		var p = ev.changedTouches ? ev.changedTouches[0] : ev;
