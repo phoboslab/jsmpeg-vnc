@@ -10,10 +10,10 @@ typedef struct {
 
 BOOL CALLBACK window_with_prefix_callback(HWND window, LPARAM lParam) {
 	window_with_prefix_data_t *find = (window_with_prefix_data_t *)lParam;
-	char title[80];
-
-	GetWindowTextA(window, title, sizeof(title));
 	
+	char title[80];
+	GetWindowTextA(window, title, sizeof(title));
+
 	if( !find->window && strncmp(find->prefix, title, strlen(find->prefix)) == 0 ) {
 		find->window = window;
 	}
@@ -37,10 +37,11 @@ void exit_usage(char *self_name) {
 		"	-f target framerate (default: 60)\n"
 		"	-p port (default: 8080)\n\n"
 
-		"Use \"Desktop\" as the window name to capture the whole Desktop\n\n"
+		"Use \"desktop\" as the window name to capture the whole Desktop. Use \"cursor\"\n"
+		"to use the window at the current cursor position.\n\n"
 
 		"To enable mouse lock in the browser (useful for games that require relative\n"
-		"mouse movements, not absolute ones), append \"?mouselock\" at the target URL\n"
+		"mouse movements, not absolute ones), append \"?mouselock\" at the target URL.\n"
 		"i.e: http://<server-ip>:8080/?mouselock\n\n",		
 		self_name
 	);
@@ -75,9 +76,20 @@ int main(int argc, char* argv[]) {
 
 	// Find target window
 	char *window_title = argv[argc-1];
-	HWND window = _stricmp(window_title, "desktop") == 0 
-		? GetDesktopWindow()
-		: window_with_prefix(window_title);
+
+	HWND window = NULL;
+	if( strcmp(window_title, "desktop") == 0 ) {
+		window = GetDesktopWindow();
+	}
+	else if( strcmp(window_title, "cursor") == 0 ) {
+		POINT cursor;
+		GetCursorPos(&cursor);
+		window = WindowFromPoint(cursor);
+	}
+	else {
+		window = window_with_prefix(window_title);
+	}
+
 	if( !window ) {
 		printf("No window with title starting with \"%s\"\n", window_title);
 		return 0;

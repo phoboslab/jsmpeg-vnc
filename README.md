@@ -18,10 +18,11 @@ Options:
 	-f target framerate (default: 60)
 	-p port (default: 8080)
 
-Use "Desktop" as the window name to capture the whole Desktop
+Use "desktop" as the window name to capture the whole Desktop. Use "cursor"
+to use the window at the current cursor position.
 
 Full Example:
-jsmpeg-vnc.exe -b 2000 -s 1280x720 -f 30 -p 9006 Desktop
+jsmpeg-vnc.exe -b 2000 -s 640x480 -f 30 -p 9006 "Quake 3: Arena"
 
 To enable mouse lock in the browser (useful for games that require relative
 mouse movements, not absolute ones), append "?mouselock" at the target URL
