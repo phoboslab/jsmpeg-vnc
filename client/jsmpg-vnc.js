@@ -19,10 +19,6 @@ if( mouseLock ) {
 		canvas.mozRequestPointerLock || 
 		canvas.webkitRequestPointerLock || 
 		(function(){});
-	canvas.requestFullscreen = canvas.requestFullscreen ||
-		canvas.mozRequestFullscreen ||
-		canvas.webkitRequestFullscreen ||
-		(function(){});
 }
 
 // input_type_t
