@@ -41,7 +41,7 @@ double timer_delta(timer_t *self) {
 	return double(time.QuadPart-self->base_time)/timer_frequency;
 }
 
-__int64 __timer_meassure_start() {
+__int64 __timer_measure_start() {
 	TIMER_GLOBAL_INIT();
 
 	LARGE_INTEGER time;
@@ -49,7 +49,7 @@ __int64 __timer_meassure_start() {
 	return time.QuadPart;
 }
 
-void __timer_meassure_end(__int64 *start, double *result) {
+void __timer_measure_end(__int64 *start, double *result) {
 	LARGE_INTEGER time;
     QueryPerformanceCounter(&time);
 	*result += double(time.QuadPart - *start)/timer_frequency;

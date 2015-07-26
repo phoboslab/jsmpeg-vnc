@@ -207,11 +207,11 @@ void app_run(app_t *self, int target_fps) {
 			timer_reset(frame_timer);
 
 			void *pixels;
-			double grab_time = timer_meassure(grab_time) {
+			double grab_time = timer_measure(grab_time) {
 				pixels = grabber_grab(self->grabber);
 			}
 
-			double encode_time = timer_meassure(encode_time) {
+			double encode_time = timer_measure(encode_time) {
 				size_t encoded_size = APP_FRAME_BUFFER_SIZE - sizeof(jsmpeg_frame_t);
 				encoder_encode(self->encoder, pixels, frame->data, &encoded_size);
 				

@@ -32,7 +32,7 @@ void exit_usage(char *self_name) {
 		"Usage: %s [options] <window name>\n\n"
 
 		"Options:\n"
-		"	-b bitrate in kilobit/s (default: estimated by output size)/s\n"
+		"	-b bitrate in kilobit/s (default: estimated by output size)\n"
 		"	-s output size as WxH. E.g: -s 640x480 (default: same as window size)\n"
 		"	-f target framerate (default: 60)\n"
 		"	-p port (default: 8080)\n\n"
