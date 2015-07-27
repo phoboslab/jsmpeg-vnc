@@ -38,7 +38,7 @@ void exit_usage(char *self_name) {
 		"	-p port (default: 8080)\n\n"
 
 		"Use \"desktop\" as the window name to capture the whole Desktop. Use \"cursor\"\n"
-		"to use the window at the current cursor position.\n\n"
+		"to capture the window at the current cursor position.\n\n"
 
 		"To enable mouse lock in the browser (useful for games that require relative\n"
 		"mouse movements, not absolute ones), append \"?mouselock\" at the target URL.\n"
