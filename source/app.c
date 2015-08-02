@@ -85,6 +85,11 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 	);
 	
 	self->server = server_create(port, APP_FRAME_BUFFER_SIZE);
+	if( !self->server ) {
+		printf("Error: could not create Server; try using another port\n");
+		return NULL;
+	}
+
 	self->server->on_connect = on_connect;
 	self->server->on_http_req = on_http_req;
 	self->server->on_message = on_message;
@@ -95,6 +100,8 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 }
 
 void app_destroy(app_t *self) {
+	if( self == NULL ) { return; }
+
 	encoder_destroy(self->encoder);
 	grabber_destroy(self->grabber);
 	server_destroy(self->server);

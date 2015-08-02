@@ -35,6 +35,8 @@ grabber_t *grabber_create(HWND window) {
 }
 
 void grabber_destroy(grabber_t *self) {
+	if( self == NULL ) { return; }
+
 	ReleaseDC(self->window, self->windowDC);
     DeleteDC(self->memoryDC);
     DeleteObject(self->bitmap);

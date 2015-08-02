@@ -52,6 +52,8 @@ encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_he
 }
 
 void encoder_destroy(encoder_t *self) {
+	if( self == NULL ) { return; }
+
 	sws_freeContext(self->sws);
 	avcodec_close(self->context);
 	av_free(self->context);	

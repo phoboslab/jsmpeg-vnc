@@ -97,6 +97,10 @@ int main(int argc, char* argv[]) {
 	// Start the app
 	app_t *app = app_create(window, port, bit_rate, width, height);
 
+	if( !app ) {
+		return 1;
+	}
+
 	char real_window_title[56];
 	GetWindowTextA(window, real_window_title, sizeof(real_window_title));
 	printf(

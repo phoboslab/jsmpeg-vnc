@@ -57,11 +57,20 @@ server_t *server_create(int port, size_t buffer_size) {
 	info.protocols = server_protocols;
 	self->context = libwebsocket_create_context(&info);
 
+	if( !self->context ) {
+		server_destroy(self);
+		return NULL;
+	}
+
 	return self;
 }
 
 void server_destroy(server_t *self) {
-	libwebsocket_context_destroy(self->context);
+	if( self == NULL ) { return; }
+
+	if( self->context ) {
+		libwebsocket_context_destroy(self->context);
+	}
 	
 	free(self->send_buffer_with_padding);
 	free(self);
