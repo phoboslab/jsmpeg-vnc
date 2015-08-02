@@ -164,8 +164,8 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 			ClientToScreen(self->grabber->window, &window_pos);
 
 			// figure out the x / y scaling for the rendered video
-			float scale_x = (float)(self->encoder->in_width / self->encoder->out_width),
-				scale_y = (float)(self->encoder->in_height / self->encoder->out_height);
+			float scale_x = ((float)self->encoder->in_width / self->encoder->out_width),
+				scale_y =((float)self->encoder->in_height / self->encoder->out_height);
 
 			int x = (int)(input->x * scale_x + window_pos.x),
 				y = (int)(input->y * scale_y + window_pos.y);
