@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "app.h"
 
+char g_token[MAX_PATH] = {0};
 typedef struct {
 	char *prefix;
 	HWND window;
@@ -36,6 +37,7 @@ void exit_usage(char *self_name) {
 		"	-s output size as WxH. E.g: -s 640x480 (default: same as window size)\n"
 		"	-f target framerate (default: 60)\n"
 		"	-p port (default: 8080)\n\n"
+        "   -t token"
 
 		"Use \"desktop\" as the window name to capture the whole Desktop. Use \"cursor\"\n"
 		"to capture the window at the current cursor position.\n\n"
@@ -70,6 +72,7 @@ int main(int argc, char* argv[]) {
 			case 'p': port = atoi(argv[i+1]); break;
 			case 's': sscanf(argv[i+1], "%dx%d", &width, &height); break;
 			case 'f': fps = atoi(argv[i+1]); break;
+            case 't': strncpy_s(g_token, MAX_PATH, argv[i+1], strlen(argv[i+1]));break;
 			default: exit_usage(argv[0]);
 		}
 	}

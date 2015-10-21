@@ -108,22 +108,52 @@ void app_destroy(app_t *self) {
 	free(self);
 }
 
+extern char g_token[MAX_PATH]; //defined in jsmpeg-vnc.c
+bool g_IsValidClient = false;
+
 int app_on_http_req(app_t *self, libwebsocket *socket, char *request) {
 	//printf("http request: %s\n", request);
+
 	if( strcmp(request, "/") == 0 ) {
-		libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
-		return true;
+        if (strlen(g_token) == 0)
+        {
+            g_IsValidClient = TRUE;
+            libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
+            return true;
+        }
 	}
+    else if (strnicmp(request, "/t=", 3) == 0)
+    {
+        if(strlen(request) > 5)
+        {
+            char* token = request + 3;
+            if (stricmp(g_token, token) == 0)
+            {
+                g_IsValidClient = TRUE;
+                libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
+                return true;
+            }
+        }
+    }
 	else if( strcmp(request, "/jsmpg.js") == 0 ) {
-		libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg.js", "text/javascript; charset=utf-8", NULL);
-		return true;
+        if (g_IsValidClient)
+        {
+            libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg.js", "text/javascript; charset=utf-8", NULL);
+            return true;
+        }
+        //else ok;
 	}
 	else if( strcmp(request, "/jsmpg-vnc.js") == 0 ) {
-		libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg-vnc.js", "text/javascript; charset=utf-8", NULL);
-		return true;
+		if (g_IsValidClient)
+		{
+            libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg-vnc.js", "text/javascript; charset=utf-8", NULL);
+            return true;
+		}
+        //else ok;
 	}
 	return false;
 }
+
 
 void app_on_connect(app_t *self, libwebsocket *socket) {
 	printf("\nclient connected: %s\n", server_get_client_address(self->server, socket));
