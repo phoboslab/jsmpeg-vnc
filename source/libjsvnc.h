@@ -1,8 +1,15 @@
 #ifndef LIBJSVNC_H
 #define LIBJSVNC_H
+#ifdef JSVNC_STATIC
 #include <stdint.h>
 
+
 #define VNC_STR_SIZE 256
+
+struct vnc_server_info
+{
+
+};
 
 class vnc_param
 {
@@ -28,7 +35,9 @@ public:
                                     //control this machine.
     void (*OnPeerConnected)( void *socket);
     void (*OnPeerDisconnected)( void *socket);
-
+    void (*OnServerCreated)( const vnc_server_info& serverInfo);
+    void (*OnServerClosed)();
+    void (*OnServerMessage)();
 };
 
 
@@ -36,8 +45,12 @@ public:
 
 #define JSVNC_OK 0
 #define JSVNC_ERR 1
+#define JSVNC_ERR_INVALID_PARAM 2
+#define JSVNC_ERR_CREATE_SERVER_FAILED 3
+#define JSVNC_ERR_SERVER_ALREAD_STARTED 4
+#define JSVNC_ERR_SERVER_IS_NOT_RUNNING 5
 
 int jsvnc_start_server(const vnc_param& vncParam);
 int jsvnc_stop_server();
-
+#endif
 #endif

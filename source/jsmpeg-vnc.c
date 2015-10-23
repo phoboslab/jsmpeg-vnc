@@ -28,6 +28,7 @@ HWND window_with_prefix(char *title_prefix) {
 	return find.window;
 }
 
+#ifndef JSVNC_STATIC
 void exit_usage(char *self_name) {
 	printf(
 		"Usage: %s [options] <window name>\n\n"
@@ -124,3 +125,4 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
+#endif

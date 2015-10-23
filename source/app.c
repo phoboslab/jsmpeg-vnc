@@ -4,6 +4,14 @@
 #include "app.h"
 #include "timer.h"
 
+#ifdef JSVNC_STATIC
+#include "libjsvnc.h"
+extern vnc_param g_vncParam;
+extern app_t*  g_theApp = nullptr;
+extern bool g_exitThread = false;
+extern bool g_isServerRunning = false;
+extern CRITICAL_SECTION g_cs;
+#endif
 
 typedef enum {
 	jsmpeg_frame_type_video = 0xFA010000,
