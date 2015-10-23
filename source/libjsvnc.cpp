@@ -26,21 +26,8 @@ vnc_param g_vncParam;
 app_t*  g_theApp = nullptr;
 bool g_exitThread = false;
 bool g_isServerRunning = false;
-CRITICAL_SECTION g_cs;
+HANDLE g_workthreadHandle = NULL;
 
-class cs_watcher
-{
-public:
-    cs_watcher()
-    {
-        InitializeCriticalSection(&g_cs);
-    }
-    ~cs_watcher()
-    {
-        DeleteCriticalSection(&g_cs);
-    }
-};
-cs_watcher g_thewatcher;
 
 //private functions
 int _jsvnc_check_param(const vnc_param& vncParam)
@@ -48,10 +35,11 @@ int _jsvnc_check_param(const vnc_param& vncParam)
     return JSVNC_OK;
 }
 
-void _cdecl _jsvnc_server_thread(void* param)
+unsigned int _stdcall _jsvnc_server_thread(void* param)
 {
     app_run(g_theApp, g_vncParam.frameRate);
-    _endthread();
+    _endthreadex(0);
+    return 0;
 }
 //defined in jsmpeg-vnc.c
 HWND window_with_prefix(char *title_prefix);
@@ -95,7 +83,7 @@ int jsvnc_start_server(const vnc_param& vncParam)
                 g_vncParam.outputHeight);
             if (g_theApp)
             {
-                _beginthread(_jsvnc_server_thread, 0, NULL);
+                g_workthreadHandle = (HANDLE)_beginthreadex(NULL, 0, _jsvnc_server_thread, NULL, 0, NULL);
                 rtv = JSVNC_OK;
             }
             else
@@ -111,11 +99,22 @@ int jsvnc_start_server(const vnc_param& vncParam)
 
 int jsvnc_stop_server()
 {
+    
     if (!g_isServerRunning)
     {
         return JSVNC_ERR_SERVER_IS_NOT_RUNNING;
     }
+    int rtv = JSVNC_ERR;
+    g_exitThread = true;
 
-    return JSVNC_ERR;
+    if(WaitForSingleObject(g_workthreadHandle, 30000) == WAIT_OBJECT_0)
+    {
+        rtv = JSVNC_OK;
+    }
+
+    CloseHandle(g_workthreadHandle);
+    g_workthreadHandle = NULL;
+
+    return rtv;
 };
 #endif

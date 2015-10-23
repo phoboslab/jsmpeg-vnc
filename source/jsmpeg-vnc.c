@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "app.h"
 
-char g_token[MAX_PATH] = {0};
+
 typedef struct {
 	char *prefix;
 	HWND window;
@@ -29,6 +29,7 @@ HWND window_with_prefix(char *title_prefix) {
 }
 
 #ifndef JSVNC_STATIC
+char g_token[MAX_PATH] = {0};
 void exit_usage(char *self_name) {
 	printf(
 		"Usage: %s [options] <window name>\n\n"

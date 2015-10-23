@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
+#include <set>
+using namespace std;
 
 #include "app.h"
 #include "timer.h"
+
+set<string> g_validClients;
 
 #ifdef JSVNC_STATIC
 #include "libjsvnc.h"
@@ -10,7 +15,6 @@ extern vnc_param g_vncParam;
 extern app_t*  g_theApp = nullptr;
 extern bool g_exitThread = false;
 extern bool g_isServerRunning = false;
-extern CRITICAL_SECTION g_cs;
 #endif
 
 typedef enum {
@@ -79,6 +83,8 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 	app_t *self = (app_t *)malloc(sizeof(app_t));
 	memset(self, 0, sizeof(app_t));
 
+    g_validClients.clear();
+
 	self->mouse_speed = APP_MOUSE_SPEED;
 	self->grabber = grabber_create(window);
 	
@@ -109,23 +115,29 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 
 void app_destroy(app_t *self) {
 	if( self == NULL ) { return; }
-
+    
 	encoder_destroy(self->encoder);
 	grabber_destroy(self->grabber);
 	server_destroy(self->server);
 	free(self);
 }
 
+#ifndef JSVNC_STATIC
 extern char g_token[MAX_PATH]; //defined in jsmpeg-vnc.c
-bool g_IsValidClient = false;
+#endif
+
 
 int app_on_http_req(app_t *self, libwebsocket *socket, char *request) {
 	//printf("http request: %s\n", request);
-
+#ifndef JSVNC_STATIC
+    char* _token = g_token;
+#else
+    char* _token = g_vncParam.token;
+#endif
 	if( strcmp(request, "/") == 0 ) {
-        if (strlen(g_token) == 0)
+        if (strlen(_token) == 0)
         {
-            g_IsValidClient = TRUE;
+            g_validClients.insert(server_get_client_address(self->server, socket));
             libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
             return true;
         }
@@ -135,16 +147,16 @@ int app_on_http_req(app_t *self, libwebsocket *socket, char *request) {
         if(strlen(request) > 5)
         {
             char* token = request + 3;
-            if (stricmp(g_token, token) == 0)
+            if (stricmp(_token, token) == 0)
             {
-                g_IsValidClient = TRUE;
+                g_validClients.insert(server_get_client_address(self->server, socket));
                 libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
                 return true;
             }
         }
     }
 	else if( strcmp(request, "/jsmpg.js") == 0 ) {
-        if (g_IsValidClient)
+        if (g_validClients.count(server_get_client_address(self->server, socket))>0)
         {
             libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg.js", "text/javascript; charset=utf-8", NULL);
             return true;
@@ -152,7 +164,7 @@ int app_on_http_req(app_t *self, libwebsocket *socket, char *request) {
         //else ok;
 	}
 	else if( strcmp(request, "/jsmpg-vnc.js") == 0 ) {
-		if (g_IsValidClient)
+		if (g_validClients.count(server_get_client_address(self->server, socket))>0)
 		{
             libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg-vnc.js", "text/javascript; charset=utf-8", NULL);
             return true;
@@ -164,8 +176,16 @@ int app_on_http_req(app_t *self, libwebsocket *socket, char *request) {
 
 
 void app_on_connect(app_t *self, libwebsocket *socket) {
-	printf("\nclient connected: %s\n", server_get_client_address(self->server, socket));
-
+	
+#ifdef JSVNC_STATIC
+    if (g_vncParam.OnPeerConnected)
+    {
+        if(!g_vncParam.OnPeerConnected(server_get_client_address(self->server, socket), socket))
+            return;
+    }
+#else
+    printf("\nclient connected: %s\n", server_get_client_address(self->server, socket));
+#endif
 	jsmpeg_header_t header = {		
 		{'j','s','m','p'}, 
 		swap_int16(self->encoder->out_width), swap_int16(self->encoder->out_height)
@@ -174,7 +194,15 @@ void app_on_connect(app_t *self, libwebsocket *socket) {
 }
 
 void app_on_close(app_t *self, libwebsocket *socket) {
+    g_validClients.erase(server_get_client_address(self->server, socket));
+#ifndef JSVNC_STATIC
 	printf("\nclient disconnected: %s\n", server_get_client_address(self->server, socket));
+#else
+    if (g_vncParam.OnPeerDisconnected)
+    {
+        g_vncParam.OnPeerDisconnected(socket);
+    }
+#endif
 }
 
 void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
@@ -245,7 +273,15 @@ void app_run(app_t *self, int target_fps) {
 
 	timer_t *frame_timer = timer_create();
 
+#ifndef JSVNC_STATIC
 	while( true ) {
+#else
+    if (g_vncParam.OnServerCreated)
+    {
+        g_vncParam.OnServerCreated();
+    }
+    while( !g_exitThread ) {
+#endif
 		double delta = timer_delta(frame_timer);
 		if( delta > wait_time ) {
 			fps = fps * 0.95f + 50.0f/delta;
@@ -265,9 +301,15 @@ void app_run(app_t *self, int target_fps) {
 					server_broadcast(self->server, frame, sizeof(jsmpeg_frame_t) + encoded_size, server_type_binary);
 				}
 			}
-			
+#ifndef JSVNC_STATIC
 			printf("fps:%3d (grabbing:%6.2fms, scaling/encoding:%6.2fms)\r", (int)fps, grab_time, encode_time);
-		}
+#else
+            if (g_vncParam.ProfilingCallback)
+            {
+                g_vncParam.ProfilingCallback((int)fps, grab_time, encode_time);
+            }
+#endif
+        }
 
 		server_update(self->server);
 		Sleep(1);
@@ -275,4 +317,10 @@ void app_run(app_t *self, int target_fps) {
 
 	timer_destroy(frame_timer);
 	free(frame);
+#ifdef JSVNC_STATIC
+    if (g_vncParam.OnServerClosed)
+    {
+        g_vncParam.OnServerClosed();
+    }
+#endif
 }

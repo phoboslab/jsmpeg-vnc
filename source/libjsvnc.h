@@ -6,10 +6,6 @@
 
 #define VNC_STR_SIZE 256
 
-struct vnc_server_info
-{
-
-};
 
 class vnc_param
 {
@@ -33,11 +29,11 @@ public:
     char    wndTitlePrefix[VNC_STR_SIZE];//Used when captureArea == window_match_title
     char    token[VNC_STR_SIZE];    //Safe token. Clients must use this token to remote
                                     //control this machine.
-    void (*OnPeerConnected)( void *socket);
+    bool (*OnPeerConnected)( const char* ipaddr, void *socket);
     void (*OnPeerDisconnected)( void *socket);
-    void (*OnServerCreated)( const vnc_server_info& serverInfo);
+    void (*OnServerCreated)();
     void (*OnServerClosed)();
-    void (*OnServerMessage)();
+    void (*ProfilingCallback)( int fps, double grab_time, double encoding_time); //Can be null
 };
 
 
