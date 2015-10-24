@@ -29,8 +29,9 @@ public:
     char    wndTitlePrefix[VNC_STR_SIZE];//Used when captureArea == window_match_title
     char    token[VNC_STR_SIZE];    //Safe token. Clients must use this token to remote
                                     //control this machine.
-    bool (*OnPeerConnected)( const char* ipaddr, void *socket);
-    void (*OnPeerDisconnected)( void *socket);
+    //return true to accept, false to deny.
+    bool (*OnPeerConnected)( const char* ipaddr, void *lwsocket);
+    void (*OnPeerDisconnected)( const char* ipaddr, void *lwsocket);
     void (*OnServerCreated)();
     void (*OnServerClosed)();
     void (*ProfilingCallback)( int fps, double grab_time, double encoding_time); //Can be null

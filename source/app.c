@@ -12,9 +12,9 @@ set<string> g_validClients;
 #ifdef JSVNC_STATIC
 #include "libjsvnc.h"
 extern vnc_param g_vncParam;
-extern app_t*  g_theApp = nullptr;
-extern bool g_exitThread = false;
-extern bool g_isServerRunning = false;
+extern app_t*  g_theApp;
+extern bool g_exitThread;
+extern bool g_isServerRunning;
 #endif
 
 typedef enum {
@@ -200,7 +200,7 @@ void app_on_close(app_t *self, libwebsocket *socket) {
 #else
     if (g_vncParam.OnPeerDisconnected)
     {
-        g_vncParam.OnPeerDisconnected(socket);
+        g_vncParam.OnPeerDisconnected(server_get_client_address(self->server, socket), socket);
     }
 #endif
 }
