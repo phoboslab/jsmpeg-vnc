@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jsmpeg-vnc", "jsmpeg-vnc.vcxproj", "{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjsvnc_test", "..\..\libjsvnc_test\libjsvnc_test.vcxproj", "{6D365491-F8BC-4479-B685-53BAA16990AA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7} = {6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjsvnc_ut", "..\..\libjsvnc_ut\libjsvnc_ut.vcxproj", "{A9B8A191-96E5-4DB3-BAC4-09243233BD62}"
 EndProject
