@@ -114,7 +114,8 @@ int jsvnc_stop_server()
 
     CloseHandle(g_workthreadHandle);
     g_workthreadHandle = NULL;
-
+    app_destroy(g_theApp);
+    g_theApp = NULL;
     return rtv;
 };
 #endif
