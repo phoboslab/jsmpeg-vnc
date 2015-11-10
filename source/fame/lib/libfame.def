@@ -1,0 +1,12 @@
+; dlltool -e exports.o -z libfame.def -l libfame.lib libfame.a
+EXPORTS
+	fame_close @ 1 ; 
+	fame_encode_frame @ 2 ; 
+	fame_encode_slice @ 3 ; 
+	fame_end_frame @ 4 ; 
+	fame_get_object @ 5 ; 
+	fame_init @ 6 ; 
+	fame_open @ 7 ; 
+	fame_register @ 8 ; 
+	fame_start_frame @ 9 ; 
+	fame_unregister @ 10 ; 

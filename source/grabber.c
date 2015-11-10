@@ -23,7 +23,11 @@ grabber_t *grabber_create(HWND window) {
 	
 	self->bitmapInfo.biSize = sizeof(BITMAPINFOHEADER);
 	self->bitmapInfo.biPlanes = 1;
+#ifdef USE_FFMPEG
 	self->bitmapInfo.biBitCount = 32;
+#else
+    self->bitmapInfo.biBitCount = 24;
+#endif
 	self->bitmapInfo.biWidth = self->width;
 	self->bitmapInfo.biHeight = -self->height;
 	self->bitmapInfo.biCompression = BI_RGB;

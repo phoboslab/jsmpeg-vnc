@@ -110,12 +110,12 @@ int main(int argc, char* argv[]) {
 	GetWindowTextA(window, real_window_title, sizeof(real_window_title));
 	printf(
 		"Window 0x%08x: \"%s\"\n"
-		"Window size: %dx%d, output size: %dx%d, bit rate: %d kb/s\n\n"
+		"Window size: %dx%d, output size: %dx%d, bit rate:  kb/s\n\n"
 		"Server started on: http://%s:%d/\n\n",
 		window, real_window_title,
 		app->grabber->width, app->grabber->height,
 		app->encoder->out_width, app->encoder->out_height,
-		app->encoder->context->bit_rate / 1000,
+		//app->encoder->context->bit_rate / 1000,
 		server_get_host_address(app->server), app->server->port
 	);
 
