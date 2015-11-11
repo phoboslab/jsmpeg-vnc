@@ -56,7 +56,7 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 	}
 
 	// check to see if x_dim and y_dim are divisible by 2
-	//if ((x_dim % 2) || (y_dim % 2)) return 1;
+	if ((x_dim % 2) || (y_dim % 2)) return 1;
 	size = x_dim * y_dim;
 
 	// allocate memory
@@ -91,7 +91,7 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 				*y = (unsigned char)(  RGBYUV02990[*r] + RGBYUV05870[*g] + RGBYUV01140[*b]);
 				*u = (unsigned char)(- RGBYUV01684[*r] - RGBYUV03316[*g] + (*b)/2          + 128);
 				*v = (unsigned char)(  (*r)/2          - RGBYUV04187[*g] - RGBYUV00813[*b] + 128);
-				b += 3;
+				b += 4;
 				y ++;
 				u ++;
 				v ++;
@@ -105,7 +105,7 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 			*y = (unsigned char)(  RGBYUV02990[*r] + RGBYUV05870[*g] + RGBYUV01140[*b]);
 			*u = (unsigned char)(- RGBYUV01684[*r] - RGBYUV03316[*g] + (*b)/2          + 128);
 			*v = (unsigned char)(  (*r)/2          - RGBYUV04187[*g] - RGBYUV00813[*b] + 128);
-			b += 3;
+			b += 4;
 			y ++;
 			u ++;
 			v ++;

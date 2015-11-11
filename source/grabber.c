@@ -18,6 +18,9 @@ grabber_t *grabber_create(HWND window, int destWitdh, int destHeight) {
 	self->width = rect.right-rect.left;
 	self->height = rect.bottom-rect.top;
 
+    self->width -= self->width%4;
+    self->height -= self->height%4;
+
     self->destWidth = destWitdh;
     self->destHeight = destHeight;
 	

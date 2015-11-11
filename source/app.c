@@ -85,6 +85,9 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 
     g_validClients.clear();
 
+    out_width -= out_width%4;
+    out_height -= out_height%4;
+
 	self->mouse_speed = APP_MOUSE_SPEED;
 	self->grabber = grabber_create(window, out_width, out_height);
 	

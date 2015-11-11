@@ -154,7 +154,7 @@ void bgr2yuv(uint8_t *destination, uint8_t *rgb, size_t width, size_t height)
     0,                                    /* variable bitrate */               \
     1,					/* 1 slice/frame */	             \
     0xffffffff,				/* unlimited length */	             \
-    60,                                   /* 25 frames/second */               \
+    25,                                   /* 25 frames/second */               \
     1,                                    /* /1 */                             \
     100,                                  /* original shape */                 \
     0,                                    /* adaptative search range */        \
