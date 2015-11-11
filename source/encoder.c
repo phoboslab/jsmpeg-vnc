@@ -169,6 +169,7 @@ encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_he
 
     fp.width = out_width ;
     fp.height = out_height ;
+    fp.bitrate = bitrate;
 
     fame_yuv_t* yuv = new fame_yuv_t;
     yuv->w = in_width;
@@ -181,9 +182,6 @@ encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_he
     self->packet = (unsigned char *) malloc(self->packet_size);
     self->frame = yuv;
     self->context = fame_open();
-    fame_object_t *object;
-    object = NULL;
-
     
     fame_init(self->context, &fp, self->packet, self->packet_size);
     
