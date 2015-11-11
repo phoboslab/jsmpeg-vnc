@@ -3,6 +3,7 @@
 
 
 #include "encoder.h"
+#include "rgb2yuv.h"
 
 
 #ifdef USE_FFMPEG
@@ -94,6 +95,13 @@ void encoder_encode(encoder_t *self, void *rgb_pixels, void *encoded_data, size_
 
 #define DEFAULT_BUFFER_SIZE 1024*1024
 
+#define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
+
+    // RGB -> YUV
+#define RGB2Y(R, G, B) CLIP(( (  66 * (R) + 129 * (G) +  25 * (B) + 128) >> 8) +  16)
+#define RGB2U(R, G, B) CLIP(( ( -38 * (R) -  74 * (G) + 112 * (B) + 128) >> 8) + 128)
+#define RGB2V(R, G, B) CLIP(( ( 112 * (R) -  94 * (G) -  18 * (B) + 128) >> 8) + 128)
+
 #include <stdint.h>
 void bgr2yuv(uint8_t *destination, uint8_t *rgb, size_t width, size_t height)
 {
@@ -112,16 +120,16 @@ void bgr2yuv(uint8_t *destination, uint8_t *rgb, size_t width, size_t height)
                 uint8_t g = rgb[3 * i + 1];
                 uint8_t r = rgb[3 * i + 2];
 
-                destination[i++] = ((66*r + 129*g + 25*b) >> 8) + 16;
+                destination[i++] = RGB2Y(r,g,b);
 
-                destination[upos++] = ((-38*r + -74*g + 112*b) >> 8) + 128;
-                destination[vpos++] = ((112*r + -94*g + -18*b) >> 8) + 128;
+                destination[upos++] = RGB2U(r,g,b);
+                destination[vpos++] = RGB2V(r,g,b);
 
                 r = rgb[3 * i];
                 g = rgb[3 * i + 1];
                 b = rgb[3 * i + 2];
 
-                destination[i++] = ((66*r + 129*g + 25*b) >> 8) + 16;
+                destination[i++] = RGB2Y(r,g,b);
             }
         }
         else
@@ -201,7 +209,8 @@ void encoder_destroy(encoder_t *self) {
 void encoder_encode(encoder_t *self, void *rgb_pixels, void *encoded_data, size_t *encoded_size) {
 
     //ConvertRGB2YUV(self->frame->w,self->frame->h,(unsigned char *)rgb_pixels,(unsigned int *)self->frame->y);
-    bgr2yuv(self->frame->y, (uint8_t*)rgb_pixels, self->in_width, self->in_height);
+    //bgr2yuv(self->frame->y, (uint8_t*)rgb_pixels, self->in_width, self->in_height);
+    RGB2YUV(self->in_width, self->in_height, rgb_pixels, self->frame->y, self->frame->u, self->frame->v, 1);
     *encoded_size = 0;
     //self->frame->pts++;
 

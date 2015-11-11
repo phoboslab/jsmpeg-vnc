@@ -90,8 +90,9 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 	
 	if( !out_width ) { out_width = self->grabber->width; }
 	if( !out_height ) { out_height = self->grabber->height; }
+#ifdef USE_FFMPEG
 	if( !bit_rate ) { bit_rate = out_width * 1500; } // estimate bit rate based on output size
-
+#endif
 	self->encoder = encoder_create(
 		self->grabber->width, self->grabber->height, // in size
 		out_width, out_height, // out size

@@ -12,12 +12,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjsvnc_ut", "..\..\libjsv
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_ffmpeg|Win32 = Debug_ffmpeg|Win32
 		Debug_Static|Win32 = Debug_Static|Win32
 		Debug|Win32 = Debug|Win32
 		Release_Static|Win32 = Release_Static|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Debug_ffmpeg|Win32.ActiveCfg = Debug_ffmpeg|Win32
+		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Debug_ffmpeg|Win32.Build.0 = Debug_ffmpeg|Win32
 		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Debug_Static|Win32.ActiveCfg = Debug_Static|Win32
 		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Debug_Static|Win32.Build.0 = Debug_Static|Win32
 		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -26,6 +29,8 @@ Global
 		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Release_Static|Win32.Build.0 = Release_Static|Win32
 		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Release|Win32.ActiveCfg = Release|Win32
 		{6166AB67-AA64-4AFE-A5EE-80A17B3BC9D7}.Release|Win32.Build.0 = Release|Win32
+		{6D365491-F8BC-4479-B685-53BAA16990AA}.Debug_ffmpeg|Win32.ActiveCfg = Debug_ffmpeg|Win32
+		{6D365491-F8BC-4479-B685-53BAA16990AA}.Debug_ffmpeg|Win32.Build.0 = Debug_ffmpeg|Win32
 		{6D365491-F8BC-4479-B685-53BAA16990AA}.Debug_Static|Win32.ActiveCfg = Debug|Win32
 		{6D365491-F8BC-4479-B685-53BAA16990AA}.Debug_Static|Win32.Build.0 = Debug|Win32
 		{6D365491-F8BC-4479-B685-53BAA16990AA}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -34,6 +39,8 @@ Global
 		{6D365491-F8BC-4479-B685-53BAA16990AA}.Release_Static|Win32.Build.0 = Release|Win32
 		{6D365491-F8BC-4479-B685-53BAA16990AA}.Release|Win32.ActiveCfg = Release|Win32
 		{6D365491-F8BC-4479-B685-53BAA16990AA}.Release|Win32.Build.0 = Release|Win32
+		{A9B8A191-96E5-4DB3-BAC4-09243233BD62}.Debug_ffmpeg|Win32.ActiveCfg = Debug_ffmpeg|Win32
+		{A9B8A191-96E5-4DB3-BAC4-09243233BD62}.Debug_ffmpeg|Win32.Build.0 = Debug_ffmpeg|Win32
 		{A9B8A191-96E5-4DB3-BAC4-09243233BD62}.Debug_Static|Win32.ActiveCfg = Debug|Win32
 		{A9B8A191-96E5-4DB3-BAC4-09243233BD62}.Debug_Static|Win32.Build.0 = Debug|Win32
 		{A9B8A191-96E5-4DB3-BAC4-09243233BD62}.Debug|Win32.ActiveCfg = Debug|Win32

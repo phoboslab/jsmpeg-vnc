@@ -33,7 +33,7 @@ grabber_t *grabber_create(HWND window, int destWitdh, int destHeight) {
 #ifdef USE_FFMPEG
 	self->bitmapInfo.biBitCount = 32;
 #else
-    self->bitmapInfo.biBitCount = 24;
+    self->bitmapInfo.biBitCount = 32;
 #endif
 	self->bitmapInfo.biWidth = self->width;
 	self->bitmapInfo.biHeight = -self->height;

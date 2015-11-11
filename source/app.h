@@ -9,7 +9,7 @@
 #include "server.h"
 
 #define APP_MOUSE_SPEED 5.0f
-#define APP_FRAME_BUFFER_SIZE (1024*1024*6)
+#define APP_FRAME_BUFFER_SIZE (1024*1024)
 
 typedef struct {
 	encoder_t *encoder;

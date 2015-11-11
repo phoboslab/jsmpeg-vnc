@@ -53,6 +53,9 @@
     <ClCompile Include="..\source\libjsvnc.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\rgb2yuv.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\app.h">
@@ -320,6 +323,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\source\libjsvnc.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\rgb2yuv.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
