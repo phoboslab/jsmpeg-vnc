@@ -95,62 +95,12 @@ void encoder_encode(encoder_t *self, void *rgb_pixels, void *encoded_data, size_
 
 #define DEFAULT_BUFFER_SIZE 1024*1024
 
-#define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
-
-    // RGB -> YUV
-#define RGB2Y(R, G, B) CLIP(( (  66 * (R) + 129 * (G) +  25 * (B) + 128) >> 8) +  16)
-#define RGB2U(R, G, B) CLIP(( ( -38 * (R) -  74 * (G) + 112 * (B) + 128) >> 8) + 128)
-#define RGB2V(R, G, B) CLIP(( ( 112 * (R) -  94 * (G) -  18 * (B) + 128) >> 8) + 128)
-
-#include <stdint.h>
-void bgr2yuv(uint8_t *destination, uint8_t *rgb, size_t width, size_t height)
-{
-    size_t image_size = width * height;
-    size_t upos = image_size;
-    size_t vpos = upos + upos / 4;
-    size_t i = 0;
-
-    for( size_t line = 0; line < height; ++line )
-    {
-        if( !(line % 2) )
-        {
-            for( size_t x = 0; x < width; x += 2 )
-            {
-                uint8_t b = rgb[3 * i];
-                uint8_t g = rgb[3 * i + 1];
-                uint8_t r = rgb[3 * i + 2];
-
-                destination[i++] = RGB2Y(r,g,b);
-
-                destination[upos++] = RGB2U(r,g,b);
-                destination[vpos++] = RGB2V(r,g,b);
-
-                r = rgb[3 * i];
-                g = rgb[3 * i + 1];
-                b = rgb[3 * i + 2];
-
-                destination[i++] = RGB2Y(r,g,b);
-            }
-        }
-        else
-        {
-            for( size_t x = 0; x < width; x += 1 )
-            {
-                uint8_t r = rgb[3 * i];
-                uint8_t g = rgb[3 * i + 1];
-                uint8_t b = rgb[3 * i + 2];
-
-                destination[i++] = ((66*r + 129*g + 25*b) >> 8) + 16;
-            }
-        }
-    }
-}
 
 #define FAME_PARAMETERS_INITIALIZER_JSMPEG {		                             \
     352,					/* CIF width  */	             \
     288,					/* CIF height */	             \
     "I",					/* I sequence */	             \
-    75,					/* average video quality */          \
+    80,					/* average video quality */          \
     0,                                    /* variable bitrate */               \
     1,					/* 1 slice/frame */	             \
     0xffffffff,				/* unlimited length */	             \
@@ -163,6 +113,9 @@ void bgr2yuv(uint8_t *destination, uint8_t *rgb, size_t width, size_t height)
     0,                                    /* number of frames */               \
     NULL                                  /* stats retrieval callback */       \
 }
+
+unsigned char* g_ubuffer = NULL;
+unsigned char* g_vbuffer = NULL;
 encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_height, int bitrate) {
     encoder_t *self = (encoder_t *)malloc(sizeof(encoder_t));
     memset(self, 0, sizeof(encoder_t));
@@ -190,7 +143,15 @@ encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_he
     self->packet = (unsigned char *) malloc(self->packet_size);
     self->frame = yuv;
     self->context = fame_open();
-    
+
+    //used in RGB2YUV
+    g_ubuffer = (unsigned char*)malloc(in_width * in_height);
+    g_vbuffer = (unsigned char*)malloc(in_width * in_height);
+
+    fame_object_t *object = fame_get_object(self->context, "profile/mpeg1");
+    if(object)
+        fame_register(self->context, "profile", object);
+
     fame_init(self->context, &fp, self->packet, self->packet_size);
     
     return self;
@@ -204,6 +165,8 @@ void encoder_destroy(encoder_t *self) {
     delete self->frame;
     free(self->packet);
     free(self);
+    free(g_ubuffer);
+    free(g_vbuffer);
 }
 
 void encoder_encode(encoder_t *self, void *rgb_pixels, void *encoded_data, size_t *encoded_size) {

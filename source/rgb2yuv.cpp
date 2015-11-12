@@ -3,6 +3,9 @@
 #include "rgb2yuv.h"
 
 
+extern unsigned char* g_ubuffer;
+extern unsigned char* g_vbuffer;
+
 static float RGBYUV02990[256], RGBYUV05870[256], RGBYUV01140[256];
 static float RGBYUV01684[256], RGBYUV03316[256];
 static float RGBYUV04187[256], RGBYUV00813[256];
@@ -43,10 +46,10 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 	static int init_done = 0;
 
 	long i, j, size;
-	unsigned char *r, *g, *b;
+	unsigned char *r, *g, *b, R, G, B;
 	unsigned char *y, *u, *v;
 	unsigned char *pu1, *pu2, *pv1, *pv2, *psu, *psv;
-	unsigned char *y_buffer, *u_buffer, *v_buffer;
+	unsigned char *y_buffer;
 	unsigned char *sub_u_buf, *sub_v_buf;
 
 	if (init_done == 0)
@@ -63,34 +66,32 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 	y_buffer = (unsigned char *)y_out;
 	sub_u_buf = (unsigned char *)u_out;
 	sub_v_buf = (unsigned char *)v_out;
-	u_buffer = (unsigned char *)malloc(size * sizeof(unsigned char));
-	v_buffer = (unsigned char *)malloc(size * sizeof(unsigned char));
-	if (!(u_buffer && v_buffer))
-	{
-		if (u_buffer) free(u_buffer);
-		if (v_buffer) free(v_buffer);
-		return 2;
-	}
+
 
 	b = (unsigned char *)bmp;
 	y = y_buffer;
-	u = u_buffer;
-	v = v_buffer;
+	u = g_ubuffer;
+	v = g_vbuffer;
 
 	// convert RGB to YUV
 	if (!flip) {
 		for (j = 0; j < y_dim; j ++)
 		{
 			y = y_buffer + (y_dim - j - 1) * x_dim;
-			u = u_buffer + (y_dim - j - 1) * x_dim;
-			v = v_buffer + (y_dim - j - 1) * x_dim;
+			u = g_ubuffer + (y_dim - j - 1) * x_dim;
+			v = g_vbuffer + (y_dim - j - 1) * x_dim;
 
 			for (i = 0; i < x_dim; i ++) {
 				g = b + 1;
 				r = b + 2;
-				*y = (unsigned char)(  RGBYUV02990[*r] + RGBYUV05870[*g] + RGBYUV01140[*b]);
-				*u = (unsigned char)(- RGBYUV01684[*r] - RGBYUV03316[*g] + (*b)/2          + 128);
-				*v = (unsigned char)(  (*r)/2          - RGBYUV04187[*g] - RGBYUV00813[*b] + 128);
+
+                R = *r;
+                G = *g;
+                B = *b;
+
+				*y = (unsigned char)(  RGBYUV02990[R] + RGBYUV05870[G] + RGBYUV01140[B]);
+				*u = (unsigned char)(- RGBYUV01684[R] - RGBYUV03316[G] + (B)/2          + 128);
+				*v = (unsigned char)(  (R)/2          - RGBYUV04187[G] - RGBYUV00813[B] + 128);
 				b += 4;
 				y ++;
 				u ++;
@@ -102,9 +103,14 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 		{
 			g = b + 1;
 			r = b + 2;
-			*y = (unsigned char)(  RGBYUV02990[*r] + RGBYUV05870[*g] + RGBYUV01140[*b]);
-			*u = (unsigned char)(- RGBYUV01684[*r] - RGBYUV03316[*g] + (*b)/2          + 128);
-			*v = (unsigned char)(  (*r)/2          - RGBYUV04187[*g] - RGBYUV00813[*b] + 128);
+
+            R = *r;
+            G = *g;
+            B = *b;
+
+            *y = (unsigned char)(  RGBYUV02990[R] + RGBYUV05870[G] + RGBYUV01140[B]);
+            *u = (unsigned char)(- RGBYUV01684[R] - RGBYUV03316[G] + (B)/2          + 128);
+            *v = (unsigned char)(  (R)/2          - RGBYUV04187[G] - RGBYUV00813[B] + 128);
 			b += 4;
 			y ++;
 			u ++;
@@ -117,10 +123,10 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 	{
 		psu = sub_u_buf + j * x_dim / 2;
 		psv = sub_v_buf + j * x_dim / 2;
-		pu1 = u_buffer + 2 * j * x_dim;
-		pu2 = u_buffer + (2 * j + 1) * x_dim;
-		pv1 = v_buffer + 2 * j * x_dim;
-		pv2 = v_buffer + (2 * j + 1) * x_dim;
+		pu1 = g_ubuffer + 2 * j * x_dim;
+		pu2 = g_ubuffer + (2 * j + 1) * x_dim;
+		pv1 = g_vbuffer + 2 * j * x_dim;
+		pv2 = g_vbuffer + (2 * j + 1) * x_dim;
 		for (i = 0; i < x_dim/2; i ++)
 		{
 			*psu = (*pu1 + *(pu1+1) + *pu2 + *(pu2+1)) / 4;
@@ -134,8 +140,8 @@ int RGB2YUV (int x_dim, int y_dim, void *bmp, void *y_out, void *u_out, void *v_
 		}
 	}
 
-	free(u_buffer);
-	free(v_buffer);
+	//free(u_buffer);
+	//free(v_buffer);
 
 	return 0;
 }
