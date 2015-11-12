@@ -11,7 +11,7 @@
 #pragma comment(lib, "avutil.lib")
 #pragma comment(lib, "swscale.lib")
 
-encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_height, int bitrate) {
+encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_height, int bitrate, int video_quality) {
 	encoder_t *self = (encoder_t *)malloc(sizeof(encoder_t));
 	memset(self, 0, sizeof(encoder_t));
 
@@ -116,7 +116,7 @@ void encoder_encode(encoder_t *self, void *rgb_pixels, void *encoded_data, size_
 
 unsigned char* g_ubuffer = NULL;
 unsigned char* g_vbuffer = NULL;
-encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_height, int bitrate) {
+encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_height, int bitrate, int video_quality) {
     encoder_t *self = (encoder_t *)malloc(sizeof(encoder_t));
     memset(self, 0, sizeof(encoder_t));
 
@@ -131,6 +131,7 @@ encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_he
     fp.width = out_width ;
     fp.height = out_height ;
     fp.bitrate = bitrate;
+    fp.quality = video_quality;
 
     fame_yuv_t* yuv = new fame_yuv_t;
     yuv->w = in_width;

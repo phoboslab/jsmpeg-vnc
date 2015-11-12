@@ -76,11 +76,14 @@ int jsvnc_start_server(const vnc_param& vncParam)
 
         if (window != NULL)
         {
+
             g_theApp = app_create(window,
                 g_vncParam.port,
                 g_vncParam.bitRate,
                 g_vncParam.outputWidth,
-                g_vncParam.outputHeight);
+                g_vncParam.outputHeight,
+                g_vncParam.videoQuality);
+
             if (g_theApp)
             {
                 g_workthreadHandle = (HANDLE)_beginthreadex(NULL, 0, _jsvnc_server_thread, NULL, 0, NULL);

@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Start the app
-	app_t *app = app_create(window, port, bit_rate, width, height);
+	app_t *app = app_create(window, port, bit_rate, width, height, 75);
 
 	if( !app ) {
 		return 1;

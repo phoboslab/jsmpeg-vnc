@@ -79,7 +79,7 @@ void on_close(server_t *server, libwebsocket *socket) { app_on_close((app_t *)se
 
 
 
-app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height) {
+app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height, int video_quality) {
 	app_t *self = (app_t *)malloc(sizeof(app_t));
 	memset(self, 0, sizeof(app_t));
 
@@ -95,11 +95,17 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 	if( !out_height ) { out_height = self->grabber->height; }
 #ifdef USE_FFMPEG
 	if( !bit_rate ) { bit_rate = out_width * 1500; } // estimate bit rate based on output size
+#else
+    if (!video_quality)
+    {
+        video_quality = 75;
+    }
 #endif
 	self->encoder = encoder_create(
 		self->grabber->width, self->grabber->height, // in size
 		out_width, out_height, // out size
-		bit_rate
+		bit_rate,
+        video_quality
 	);
 	
 	self->server = server_create(port, APP_FRAME_BUFFER_SIZE);

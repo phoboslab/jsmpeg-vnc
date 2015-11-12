@@ -20,10 +20,15 @@ public:
     };
     ///data
     uint32_t port;              //HTTP serve port, default 8080
+//<FFMPEG
     uint32_t outputWidth;       //Output size. default:0 (means the same as window size)
     uint32_t outputHeight;      //
     uint32_t bitRate;           //bitrate in kilobit/s 0 means estimated by output size, default: 5120
     uint32_t frameRate;         //target framerate. default: 60
+//>
+//<libfame
+    uint32_t videoQuality;       //from 1 to 100, the greater the better.
+//>
     capture_area captureArea;   
     void*   hwnd;               //Used when captureArea == window
     char    wndTitlePrefix[VNC_STR_SIZE];//Used when captureArea == window_match_title

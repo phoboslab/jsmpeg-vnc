@@ -1,4 +1,4 @@
-
+#ifndef USE_FFMPEG
 #include "stdlib.h"
 #include "rgb2yuv.h"
 
@@ -159,4 +159,4 @@ void InitLookupTable()
 	for (i = 0; i < 256; i++) RGBYUV04187[i] = (float)0.4187 * i;
 	for (i = 0; i < 256; i++) RGBYUV00813[i] = (float)0.0813 * i;
 }
-
+#endif

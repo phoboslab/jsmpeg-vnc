@@ -41,7 +41,7 @@ typedef struct {
 #endif
 
 
-encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_height, int bitrate);
+encoder_t *encoder_create(int in_width, int in_height, int out_width, int out_height, int bitrate, int video_quality);
 void encoder_destroy(encoder_t *self);
 void encoder_encode(encoder_t *self, void *rgb_pixels, void *encoded_data, size_t *encoded_size);
 
