@@ -86,8 +86,10 @@ int jsvnc_start_server(const vnc_param& vncParam)
 
             if (g_theApp)
             {
+                g_exitThread = false;
                 g_workthreadHandle = (HANDLE)_beginthreadex(NULL, 0, _jsvnc_server_thread, NULL, 0, NULL);
                 g_isServerRunning = true;
+                
                 rtv = JSVNC_OK;
             }
             else
