@@ -190,7 +190,7 @@ void app_on_connect(app_t *self, libwebsocket *socket) {
 #ifdef JSVNC_STATIC
     if (g_vncParam.OnPeerConnected)
     {
-        if(!g_vncParam.OnPeerConnected(server_get_client_address(self->server, socket), socket))
+        if(!g_vncParam.OnPeerConnected(server_get_client_address(self->server, socket), socket, g_vncParam.userData))
             return;
     }
 #else
@@ -210,7 +210,7 @@ void app_on_close(app_t *self, libwebsocket *socket) {
 #else
     if (g_vncParam.OnPeerDisconnected)
     {
-        g_vncParam.OnPeerDisconnected(server_get_client_address(self->server, socket), socket);
+        g_vncParam.OnPeerDisconnected(server_get_client_address(self->server, socket), socket, g_vncParam.userData);
     }
 #endif
 }
@@ -288,7 +288,7 @@ void app_run(app_t *self, int target_fps) {
 #else
     if (g_vncParam.OnServerCreated)
     {
-        g_vncParam.OnServerCreated();
+        g_vncParam.OnServerCreated(g_vncParam.userData);
     }
     while( !g_exitThread ) {
 #endif
@@ -316,7 +316,7 @@ void app_run(app_t *self, int target_fps) {
 #else
             if (g_vncParam.ProfilingCallback)
             {
-                g_vncParam.ProfilingCallback((int)fps, grab_time, encode_time);
+                g_vncParam.ProfilingCallback((int)fps, grab_time, encode_time, g_vncParam.userData);
             }
 #endif
         }
@@ -330,7 +330,7 @@ void app_run(app_t *self, int target_fps) {
 #ifdef JSVNC_STATIC
     if (g_vncParam.OnServerClosed)
     {
-        g_vncParam.OnServerClosed();
+        g_vncParam.OnServerClosed(g_vncParam.userData);
     }
 #endif
 }

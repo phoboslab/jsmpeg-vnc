@@ -29,17 +29,18 @@ public:
 //<libfame
     uint32_t videoQuality;       //from 1 to 100, the greater the better.
 //>
-    capture_area captureArea;   
+    capture_area captureArea;  
+    void*   userData;
     void*   hwnd;               //Used when captureArea == window
     char    wndTitlePrefix[VNC_STR_SIZE];//Used when captureArea == window_match_title
     char    token[VNC_STR_SIZE];    //Safe token. Clients must use this token to remote
                                     //control this machine.
     //return true to accept, false to deny.
-    bool (*OnPeerConnected)( const char* ipaddr, void *lwsocket);
-    void (*OnPeerDisconnected)( const char* ipaddr, void *lwsocket);
-    void (*OnServerCreated)();
-    void (*OnServerClosed)();
-    void (*ProfilingCallback)( int fps, double grab_time, double encoding_time); //Can be null
+    bool (*OnPeerConnected)( const char* ipaddr, void *lwsocket, void* userData);
+    void (*OnPeerDisconnected)( const char* ipaddr, void *lwsocket, void* userData);
+    void (*OnServerCreated)(void* userData);
+    void (*OnServerClosed)(void* userData);
+    void (*ProfilingCallback)( int fps, double grab_time, double encoding_time, void* userData); //Can be null
 };
 
 
