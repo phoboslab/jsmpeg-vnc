@@ -65,8 +65,8 @@ var sendMouse = function(ev, action) {
 		var p = ev.changedTouches ? ev.changedTouches[0] : ev;
 		
 		// FUCK, DID I MENTION I LOOOOOVE VENDOR PREFIXES? SO USEFUL!
-		x = p.movemenX || p.mozMovementX || p.webkitMovementX;
-		y = p.movemenY || p.mozMovementY || p.webkitMovementY;
+		x = p.movementX || p.mozMovementX || p.webkitMovementX;
+		y = p.movementY || p.mozMovementY || p.webkitMovementY;
 
 		if( typeof x === 'undefined' ) {
 			x = p.clientX - lastMouse.x;
