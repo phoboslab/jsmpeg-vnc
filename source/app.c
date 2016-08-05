@@ -28,9 +28,9 @@ typedef enum {
 	input_type_mouse_button = 0x0002,
 	input_type_mouse_absolute = 0x0004,
 	input_type_mouse_relative = 0x0008,
-	input_type_mouse = 
-		input_type_mouse_button | 
-		input_type_mouse_absolute | 
+	input_type_mouse =
+		input_type_mouse_button |
+		input_type_mouse_absolute |
 		input_type_mouse_relative
 } input_type_t;
 
@@ -44,6 +44,7 @@ typedef struct {
 	unsigned short type;
 	unsigned short flags;
 	float x, y;
+	int amount; //For scrolling
 } input_mouse_t;
 
 
@@ -73,7 +74,7 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 
 	self->mouse_speed = APP_MOUSE_SPEED;
 	self->grabber = grabber_create(window);
-	
+
 	if( !out_width ) { out_width = self->grabber->width; }
 	if( !out_height ) { out_height = self->grabber->height; }
 	if( !bit_rate ) { bit_rate = out_width * 1500; } // estimate bit rate based on output size
@@ -83,7 +84,7 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 		out_width, out_height, // out size
 		bit_rate
 	);
-	
+
 	self->server = server_create(port, APP_FRAME_BUFFER_SIZE);
 	if( !self->server ) {
 		printf("Error: could not create Server; try using another port\n");
@@ -128,8 +129,8 @@ int app_on_http_req(app_t *self, libwebsocket *socket, char *request) {
 void app_on_connect(app_t *self, libwebsocket *socket) {
 	printf("\nclient connected: %s\n", server_get_client_address(self->server, socket));
 
-	jsmpeg_header_t header = {		
-		{'j','s','m','p'}, 
+	jsmpeg_header_t header = {
+		{'j','s','m','p'},
 		swap_int16(self->encoder->out_width), swap_int16(self->encoder->out_height)
 	};
 	server_send(self->server, socket, &header, sizeof(header), server_type_binary);
@@ -190,8 +191,8 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 		}
 
 		if( type & input_type_mouse_button ) {
-			//printf("mouse button %d\n", input->flags);
-			mouse_event(input->flags, 0, 0, 0, NULL);
+			//printf("mouse button %d and scroll amount %d\n", input->flags, input->amount);
+			mouse_event(input->flags, 0, 0, input->amount, NULL);
 		}
 	}
 }
@@ -221,13 +222,13 @@ void app_run(app_t *self, int target_fps) {
 			double encode_time = timer_measure(encode_time) {
 				size_t encoded_size = APP_FRAME_BUFFER_SIZE - sizeof(jsmpeg_frame_t);
 				encoder_encode(self->encoder, pixels, frame->data, &encoded_size);
-				
+
 				if( encoded_size ) {
 					frame->size = swap_int32(sizeof(jsmpeg_frame_t) + encoded_size);
 					server_broadcast(self->server, frame, sizeof(jsmpeg_frame_t) + encoded_size, server_type_binary);
 				}
 			}
-			
+
 			printf("fps:%3d (grabbing:%6.2fms, scaling/encoding:%6.2fms)\r", (int)fps, grab_time, encode_time);
 		}
 
