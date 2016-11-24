@@ -15,11 +15,14 @@ typedef struct {
 	int width;
 	int height;
 	
+    int destWidth;
+    int destHeight;
+
 	void *pixels;
 } grabber_t;
 
 
-grabber_t *grabber_create(HWND window);
+grabber_t *grabber_create(HWND window, int destWitdh = 0, int destHeight = 0);
 void grabber_destroy(grabber_t *self);
 void *grabber_grab(grabber_t *self);
 

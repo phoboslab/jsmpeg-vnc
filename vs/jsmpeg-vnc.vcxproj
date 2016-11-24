@@ -1,8 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_ffmpeg|Win32">
+      <Configuration>Debug_ffmpeg</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_Static_MDd|Win32">
+      <Configuration>Debug_Static_MDd</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_Static|Win32">
+      <Configuration>Debug_Static</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Static_MD|Win32">
+      <Configuration>Release_Static_MD</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Static|Win32">
+      <Configuration>Release_Static</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -19,103 +39,23 @@
     <ClCompile Include="..\source\encoder.c" />
     <ClCompile Include="..\source\grabber.c" />
     <ClCompile Include="..\source\jsmpeg-vnc.c" />
+    <ClCompile Include="..\source\libjsvnc.cpp" />
+    <ClCompile Include="..\source\rgb2yuv.cpp" />
     <ClCompile Include="..\source\server.c" />
     <ClCompile Include="..\source\timer.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\app.h" />
     <ClInclude Include="..\source\encoder.h" />
-    <ClInclude Include="..\source\ffmpeg\include\inttypes.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\avcodec.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\avfft.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\d3d11va.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\dv_profile.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\dxva2.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\old_codec_ids.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\qsv.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\vaapi.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\vda.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\vdpau.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\version.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\vorbis_parser.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavcodec\xvmc.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\adler32.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\aes.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\attributes.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\audioconvert.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\audio_fifo.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\avassert.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\avconfig.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\avstring.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\avutil.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\base64.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\blowfish.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\bprint.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\bswap.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\buffer.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\camellia.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\cast5.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\channel_layout.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\common.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\cpu.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\crc.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\dict.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\display.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\downmix_info.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\error.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\eval.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\ffversion.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\fifo.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\file.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\frame.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\hash.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\hmac.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\imgutils.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\intfloat.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\intreadwrite.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\lfg.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\log.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\lzo.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\macros.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\mathematics.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\md5.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\mem.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\motion_vector.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\murmur3.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\old_pix_fmts.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\opt.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\parseutils.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\pixdesc.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\pixelutils.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\pixfmt.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\random_seed.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\rational.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\replaygain.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\ripemd.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\samplefmt.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\sha.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\sha512.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\stereo3d.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\tea.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\threadmessage.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\time.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\timecode.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\timestamp.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\twofish.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\version.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libavutil\xtea.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libswscale\swscale.h" />
-    <ClInclude Include="..\source\ffmpeg\include\libswscale\version.h" />
     <ClInclude Include="..\source\grabber.h" />
+    <ClInclude Include="..\source\libjsvnc.h" />
     <ClInclude Include="..\source\libwebsocket\libwebsockets.h" />
     <ClInclude Include="..\source\libwebsocket\websock-w32.h" />
+    <ClInclude Include="..\source\rgb2yuv.h" />
     <ClInclude Include="..\source\server.h" />
     <ClInclude Include="..\source\timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\source\ffmpeg\lib\avcodec.lib" />
-    <Library Include="..\source\ffmpeg\lib\avutil.lib" />
-    <Library Include="..\source\ffmpeg\lib\swscale.lib" />
     <Library Include="..\source\libwebsocket\websockets_static.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -128,12 +68,46 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_ffmpeg|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static_MDd|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static_MD|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110_xp</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -141,7 +115,22 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_ffmpeg|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static_MDd|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static_MD|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -149,11 +138,42 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>..\source\ffmpeg\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(WindowsSdkDir)\common\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_ffmpeg|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\source\ffmpeg\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(WindowsSdkDir)\common\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\source\ffmpeg\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(WindowsSdkDir)\common\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>libjsvncd_MTd</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static_MDd|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\source\ffmpeg\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(WindowsSdkDir)\common\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>libjsvnc_MDd</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\source\ffmpeg\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\developement\c++\jsmpg-vnc\source;$(WindowsSdkDir)\common\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\source\ffmpeg\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\developement\c++\jsmpg-vnc\source;$(WindowsSdkDir)\common\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>libjsvnc_MT</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static_MD|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\source\ffmpeg\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\developement\c++\jsmpg-vnc\source;$(WindowsSdkDir)\common\lib;$(LibraryPath)</LibraryPath>
+    <TargetName>libjsvnc_MD</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,12 +181,63 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FFMPEG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalOptions>/D __STDC_CONSTANT_MACROS %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\source\fame\lib;$(SolutionDir)..\source\ffmpeg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_ffmpeg|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>USE_FFMPEG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/D __STDC_CONSTANT_MACROS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\source\fame\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>JSVNC_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/D __STDC_CONSTANT_MACROS %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(OutDir)libjsvncd_MTd.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static_MDd|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>JSVNC_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/D __STDC_CONSTANT_MACROS %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(OutDir)libjsvnc_MDd.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -178,9 +249,52 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_FFMPEG;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
       <AdditionalOptions>/D __STDC_CONSTANT_MACROS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\source\fame\lib;$(SolutionDir)..\source\ffmpeg\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>JSVNC_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/D __STDC_CONSTANT_MACROS %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(OutDir)libjsvnc_MT.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static_MD|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>JSVNC_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>/D __STDC_CONSTANT_MACROS %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(OutDir)libjsvnc_MD.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

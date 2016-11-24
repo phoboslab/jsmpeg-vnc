@@ -20,7 +20,7 @@ typedef struct {
 } app_t;
 
 
-app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height);
+app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height, int video_quality);
 void app_destroy(app_t *self);
 void app_run(app_t *self, int targt_fps);
 

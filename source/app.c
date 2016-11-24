@@ -1,9 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
+#include <set>
+using namespace std;
 
 #include "app.h"
 #include "timer.h"
 
+set<string> g_validClients;
+
+#ifdef JSVNC_STATIC
+#include "libjsvnc.h"
+extern vnc_param g_vncParam;
+extern app_t*  g_theApp;
+extern bool g_exitThread;
+extern bool g_isServerRunning;
+#endif
 
 typedef enum {
 	jsmpeg_frame_type_video = 0xFA010000,
@@ -67,21 +79,33 @@ void on_close(server_t *server, libwebsocket *socket) { app_on_close((app_t *)se
 
 
 
-app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height) {
+app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height, int video_quality) {
 	app_t *self = (app_t *)malloc(sizeof(app_t));
 	memset(self, 0, sizeof(app_t));
 
+    g_validClients.clear();
+
+    out_width -= out_width%4;
+    out_height -= out_height%4;
+
 	self->mouse_speed = APP_MOUSE_SPEED;
-	self->grabber = grabber_create(window);
+	self->grabber = grabber_create(window, out_width, out_height);
 	
 	if( !out_width ) { out_width = self->grabber->width; }
 	if( !out_height ) { out_height = self->grabber->height; }
+#ifdef USE_FFMPEG
 	if( !bit_rate ) { bit_rate = out_width * 1500; } // estimate bit rate based on output size
-
+#else
+    if (!video_quality)
+    {
+        video_quality = 75;
+    }
+#endif
 	self->encoder = encoder_create(
 		self->grabber->width, self->grabber->height, // in size
 		out_width, out_height, // out size
-		bit_rate
+		bit_rate,
+        video_quality
 	);
 	
 	self->server = server_create(port, APP_FRAME_BUFFER_SIZE);
@@ -101,33 +125,77 @@ app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_he
 
 void app_destroy(app_t *self) {
 	if( self == NULL ) { return; }
-
+    
 	encoder_destroy(self->encoder);
 	grabber_destroy(self->grabber);
 	server_destroy(self->server);
 	free(self);
 }
 
+#ifndef JSVNC_STATIC
+extern char g_token[MAX_PATH]; //defined in jsmpeg-vnc.c
+#endif
+
+
 int app_on_http_req(app_t *self, libwebsocket *socket, char *request) {
 	//printf("http request: %s\n", request);
+#ifndef JSVNC_STATIC
+    char* _token = g_token;
+#else
+    char* _token = g_vncParam.token;
+#endif
 	if( strcmp(request, "/") == 0 ) {
-		libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
-		return true;
+        if (strlen(_token) == 0)
+        {
+            g_validClients.insert(server_get_client_address(self->server, socket));
+            libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
+            return true;
+        }
 	}
+    else if (strnicmp(request, "/t=", 3) == 0)
+    {
+        if(strlen(request) > 5)
+        {
+            char* token = request + 3;
+            if (stricmp(_token, token) == 0)
+            {
+                g_validClients.insert(server_get_client_address(self->server, socket));
+                libwebsockets_serve_http_file(self->server->context, socket, "client/index.html", "text/html; charset=utf-8", NULL);
+                return true;
+            }
+        }
+    }
 	else if( strcmp(request, "/jsmpg.js") == 0 ) {
-		libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg.js", "text/javascript; charset=utf-8", NULL);
-		return true;
+        if (g_validClients.count(server_get_client_address(self->server, socket))>0)
+        {
+            libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg.js", "text/javascript; charset=utf-8", NULL);
+            return true;
+        }
+        //else ok;
 	}
 	else if( strcmp(request, "/jsmpg-vnc.js") == 0 ) {
-		libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg-vnc.js", "text/javascript; charset=utf-8", NULL);
-		return true;
+		if (g_validClients.count(server_get_client_address(self->server, socket))>0)
+		{
+            libwebsockets_serve_http_file(self->server->context, socket, "client/jsmpg-vnc.js", "text/javascript; charset=utf-8", NULL);
+            return true;
+		}
+        //else ok;
 	}
 	return false;
 }
 
-void app_on_connect(app_t *self, libwebsocket *socket) {
-	printf("\nclient connected: %s\n", server_get_client_address(self->server, socket));
 
+void app_on_connect(app_t *self, libwebsocket *socket) {
+	
+#ifdef JSVNC_STATIC
+    if (g_vncParam.OnPeerConnected)
+    {
+        if(!g_vncParam.OnPeerConnected(server_get_client_address(self->server, socket), socket, g_vncParam.userData))
+            return;
+    }
+#else
+    printf("\nclient connected: %s\n", server_get_client_address(self->server, socket));
+#endif
 	jsmpeg_header_t header = {		
 		{'j','s','m','p'}, 
 		swap_int16(self->encoder->out_width), swap_int16(self->encoder->out_height)
@@ -136,7 +204,15 @@ void app_on_connect(app_t *self, libwebsocket *socket) {
 }
 
 void app_on_close(app_t *self, libwebsocket *socket) {
+    g_validClients.erase(server_get_client_address(self->server, socket));
+#ifndef JSVNC_STATIC
 	printf("\nclient disconnected: %s\n", server_get_client_address(self->server, socket));
+#else
+    if (g_vncParam.OnPeerDisconnected)
+    {
+        g_vncParam.OnPeerDisconnected(server_get_client_address(self->server, socket), socket, g_vncParam.userData);
+    }
+#endif
 }
 
 void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
@@ -207,7 +283,15 @@ void app_run(app_t *self, int target_fps) {
 
 	timer_t *frame_timer = timer_create();
 
+#ifndef JSVNC_STATIC
 	while( true ) {
+#else
+    if (g_vncParam.OnServerCreated)
+    {
+        g_vncParam.OnServerCreated(g_vncParam.userData);
+    }
+    while( !g_exitThread ) {
+#endif
 		double delta = timer_delta(frame_timer);
 		if( delta > wait_time ) {
 			fps = fps * 0.95f + 50.0f/delta;
@@ -227,9 +311,15 @@ void app_run(app_t *self, int target_fps) {
 					server_broadcast(self->server, frame, sizeof(jsmpeg_frame_t) + encoded_size, server_type_binary);
 				}
 			}
-			
+#ifndef JSVNC_STATIC
 			printf("fps:%3d (grabbing:%6.2fms, scaling/encoding:%6.2fms)\r", (int)fps, grab_time, encode_time);
-		}
+#else
+            if (g_vncParam.ProfilingCallback)
+            {
+                g_vncParam.ProfilingCallback((int)fps, grab_time, encode_time, g_vncParam.userData);
+            }
+#endif
+        }
 
 		server_update(self->server);
 		Sleep(1);
@@ -237,4 +327,10 @@ void app_run(app_t *self, int target_fps) {
 
 	timer_destroy(frame_timer);
 	free(frame);
+#ifdef JSVNC_STATIC
+    if (g_vncParam.OnServerClosed)
+    {
+        g_vncParam.OnServerClosed(g_vncParam.userData);
+    }
+#endif
 }

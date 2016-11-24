@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "app.h"
 
+
 typedef struct {
 	char *prefix;
 	HWND window;
@@ -27,6 +28,8 @@ HWND window_with_prefix(char *title_prefix) {
 	return find.window;
 }
 
+#ifndef JSVNC_STATIC
+char g_token[MAX_PATH] = {0};
 void exit_usage(char *self_name) {
 	printf(
 		"Usage: %s [options] <window name>\n\n"
@@ -36,6 +39,7 @@ void exit_usage(char *self_name) {
 		"	-s output size as WxH. E.g: -s 640x480 (default: same as window size)\n"
 		"	-f target framerate (default: 60)\n"
 		"	-p port (default: 8080)\n\n"
+        "   -t token"
 
 		"Use \"desktop\" as the window name to capture the whole Desktop. Use \"cursor\"\n"
 		"to capture the window at the current cursor position.\n\n"
@@ -70,6 +74,7 @@ int main(int argc, char* argv[]) {
 			case 'p': port = atoi(argv[i+1]); break;
 			case 's': sscanf(argv[i+1], "%dx%d", &width, &height); break;
 			case 'f': fps = atoi(argv[i+1]); break;
+            case 't': strncpy_s(g_token, MAX_PATH, argv[i+1], strlen(argv[i+1]));break;
 			default: exit_usage(argv[0]);
 		}
 	}
@@ -95,7 +100,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Start the app
-	app_t *app = app_create(window, port, bit_rate, width, height);
+	app_t *app = app_create(window, port, bit_rate, width, height, 75);
 
 	if( !app ) {
 		return 1;
@@ -105,12 +110,12 @@ int main(int argc, char* argv[]) {
 	GetWindowTextA(window, real_window_title, sizeof(real_window_title));
 	printf(
 		"Window 0x%08x: \"%s\"\n"
-		"Window size: %dx%d, output size: %dx%d, bit rate: %d kb/s\n\n"
+		"Window size: %dx%d, output size: %dx%d, bit rate:  kb/s\n\n"
 		"Server started on: http://%s:%d/\n\n",
 		window, real_window_title,
 		app->grabber->width, app->grabber->height,
 		app->encoder->out_width, app->encoder->out_height,
-		app->encoder->context->bit_rate / 1000,
+		//app->encoder->context->bit_rate / 1000,
 		server_get_host_address(app->server), app->server->port
 	);
 
@@ -121,3 +126,4 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
+#endif
