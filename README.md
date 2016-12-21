@@ -17,11 +17,13 @@ Options:
 	-s output size as WxH. E.g: -s 640x480 (default: same as window size)
 	-f target framerate (default: 60)
 	-p port (default: 8080)
+	-c crop area in the captured window as X,Y,W,H. E.g.: -c 200,300,640,480
+	-i enable/disable remote input. E.g. -i 0 (default: 1)
 
 Use "desktop" as the window name to capture the whole Desktop. Use "cursor"
 to capture the window at the current cursor position.
 
-Full Example:
+Example:
 jsmpeg-vnc.exe -b 2000 -s 640x480 -f 30 -p 9006 "Quake 3: Arena"
 
 To enable mouse lock in the browser (useful for games that require relative
