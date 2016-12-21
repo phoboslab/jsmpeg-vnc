@@ -67,12 +67,13 @@ void on_close(server_t *server, libwebsocket *socket) { app_on_close((app_t *)se
 
 
 
-app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height) {
+app_t *app_create(HWND window, int port, int bit_rate, int out_width, int out_height, int allow_input, grabber_crop_area_t crop) {
 	app_t *self = (app_t *)malloc(sizeof(app_t));
 	memset(self, 0, sizeof(app_t));
 
 	self->mouse_speed = APP_MOUSE_SPEED;
-	self->grabber = grabber_create(window);
+	self->grabber = grabber_create(window, crop);
+	self->allow_input = allow_input;
 	
 	if( !out_width ) { out_width = self->grabber->width; }
 	if( !out_height ) { out_height = self->grabber->height; }
@@ -140,6 +141,10 @@ void app_on_close(app_t *self, libwebsocket *socket) {
 }
 
 void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
+	if (!self->allow_input) {
+		return;
+	}
+
 	input_type_t type = (input_type_t)((unsigned short *)data)[0];
 
 	if( type & input_type_key && len >= sizeof(input_key_t) ) {
@@ -174,8 +179,8 @@ void app_on_message(app_t *self, libwebsocket *socket, void *data, size_t len) {
 			float scale_x = ((float)self->encoder->in_width / self->encoder->out_width),
 				scale_y =((float)self->encoder->in_height / self->encoder->out_height);
 
-			int x = (int)(input->x * scale_x + window_pos.x),
-				y = (int)(input->y * scale_y + window_pos.y);
+			int x = (int)(input->x * scale_x + window_pos.x + self->grabber->crop.x),
+				y = (int)(input->y * scale_y + window_pos.y + self->grabber->crop.y);
 
 			//printf("mouse absolute %d, %d\n", x, y);
 			SetCursorPos(x, y);

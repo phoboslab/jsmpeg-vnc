@@ -5,7 +5,7 @@
 
 #include "grabber.h"
 
-grabber_t *grabber_create(HWND window) {
+grabber_t *grabber_create(HWND window, grabber_crop_area_t crop) {
 	grabber_t *self = (grabber_t *)malloc(sizeof(grabber_t));
 	memset(self, 0, sizeof(grabber_t));
 	
@@ -16,6 +16,15 @@ grabber_t *grabber_create(HWND window) {
 	
 	self->width = rect.right-rect.left;
 	self->height = rect.bottom-rect.top;
+
+	self->crop = crop;
+	if( crop.width == 0 || crop.height == 0 ) {
+		self->crop.width = self->width - crop.x;
+		self->crop.height = self->height - crop.y; 
+	}
+
+	self->width = self->crop.width;
+	self->height = self->crop.height;
 	
 	self->windowDC = GetDC(window);
 	self->memoryDC = CreateCompatibleDC(self->windowDC);
@@ -47,7 +56,7 @@ void grabber_destroy(grabber_t *self) {
 
 void *grabber_grab(grabber_t *self) {
 	SelectObject(self->memoryDC, self->bitmap);
-	BitBlt(self->memoryDC, 0, 0, self->width, self->height, self->windowDC, 0, 0, SRCCOPY);
+	BitBlt(self->memoryDC, 0, 0, self->width, self->height, self->windowDC, self->crop.x, self->crop.y, SRCCOPY);
 	GetDIBits(self->memoryDC, self->bitmap, 0, self->height, self->pixels, (BITMAPINFO*)&(self->bitmapInfo), DIB_RGB_COLORS);
 	
 	return self->pixels;
