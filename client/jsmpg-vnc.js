@@ -86,7 +86,7 @@ var sendMouse = function(ev, action) {
 		var scaleX = canvas.width / (rect.right-rect.left),
 			scaleY = canvas.height / (rect.bottom-rect.top);
 		
-		var p = event.changedTouches ? ev.changedTouches[0] : ev;
+		var p = ev.changedTouches ? ev.changedTouches[0] : ev;
 		var x = (p.clientX - rect.left) * scaleX,
 			y = (p.clientY - rect.top) * scaleY;
 	}
