@@ -3,7 +3,7 @@ document.body.className = ('ontouchstart' in window) ? 'mobile' : 'desktop';
 
 
 // Setup the WebSocket connection and start the player
-var client = new WebSocket( 'ws://' + window.location.host + '/ws' );
+var client = new WebSocket(((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.host + '/ws' );
 
 var canvas = document.getElementById('videoCanvas');
 var player = new jsmpeg(client, {canvas:canvas});
