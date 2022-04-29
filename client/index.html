@@ -28,35 +28,74 @@
 		.key {
 			color: #fff;
 			float: left;
-			width: 72px;
+			width: 48px;
 			height: 48px;
-			padding-top: 24px;
 			background-color: #5bcbeb;
 			position: absolute;
 		}
 		.key-small {
 			height: 28px;
-			padding-top: 8px;
+			width: 68px;
 		}
-		#key-up {left: 40px; top: 0px; }
-		#key-down {left: 40px; top: 88px; }
-		#key-left {left: 160px; top: 0px; }
-		#key-right {left: 240px; top: 0px; }
-		#key-esc {left: 160px; top: 124px; }
-		#key-enter {left: 240px; top: 124px; }
+		.keyboard {
+			float: left;
+			position: absolute;
+			width: 150px;
+		}
+		input[type='text'],
+		input[type='number'],
+		textarea {
+		font-size: 16px;
+		}
+		
+		#keyboard {left: 60px; top: 0px; }
+
+		#key-1 {left: 35px; top: 40px; }
+		#key-2 {left: 85px; top: 40px; }
+		#key-3 {left: 135px; top: 40px; }
+		#key-4 {left: 185px; top: 40px; }
+		#key-5 {left: 235px; top: 40px; }
+		#key-6 {left: 35px; top: 90px; }
+		#key-7 {left: 85px; top: 90px; }
+		#key-8 {left: 135px; top: 90px; }
+		#key-9 {left: 185px; top: 90px; }
+		#key-0 {left: 235px; top: 90px; }
+
+		#key-up {left: 85px; top: 150px; }
+		#key-down {left: 85px; top: 200px; }
+		#key-left {left: 35px; top: 200px; }
+		#key-right {left: 135px; top: 200px; }
+
+		#key-esc {left: 210px; top: 160px; }
+		#key-enter {left: 210px; top: 220px; }
 	</style>
 </head>
 <body>
 	<canvas id="videoCanvas" width="640" height="480"></canvas>
 
 	<div class="keys mobile-only">
-		<div class="key" data-code="38" id="key-up">UP</div>
-		<div class="key" data-code="40" id="key-down">DOWN</div>
-		<div class="key" data-code="39" id="key-right">RIGHT</div>
-		<div class="key" data-code="37" id="key-left">LEFT</div>
+		<div class="key" data-code="49" id="key-1">1</div>
+		<div class="key" data-code="50" id="key-2">2</div>
+		<div class="key" data-code="51" id="key-3">3</div>
+		<div class="key" data-code="52" id="key-4">4</div>
+		<div class="key" data-code="53" id="key-5">5</div>
+		<div class="key" data-code="54" id="key-6">6</div>
+		<div class="key" data-code="55" id="key-7">7</div>
+		<div class="key" data-code="56" id="key-8">8</div>
+		<div class="key" data-code="57" id="key-9">9</div>
+		<div class="key" data-code="48" id="key-0">0</div>
+	
+		<div class="key" data-code="38" id="key-up">^</div>
+		<div class="key" data-code="40" id="key-down">v</div>
+		<div class="key" data-code="39" id="key-right">></div>
+		<div class="key" data-code="37" id="key-left"><</div>
 		
 		<div class="key key-small" data-code="27" id="key-esc">ESC</div>
 		<div class="key key-small" data-code="13" id="key-enter">ENTER</div>
+		
+		<div class="keyboard" id="keyboard">
+			<input type="text">
+		</div>
 	</div>
 
 	<script type="text/javascript" src="jsmpg.js"></script>
