@@ -1,10 +1,8 @@
 # jsmpeg-vnc
 
-A low latency, high framerate screen sharing server and client, viewable in any modern browser.
+The only way to play gta on your browser
 
-[More Info & Demo Video](http://phoboslab.org/log/2015/07/play-gta-v-in-your-browser-sort-of)
-
-[Download Binaries](https://github.com/phoboslab/jsmpeg-vnc/releases)
+[Download Binaries](https://github.com/seyedeliasfakoorian/jsmpeg-vnc/releases)
 
 
 ## Usage & Performance Considerations
@@ -40,10 +38,8 @@ If Windows complains about a missing MSVCR100.dll, install the [Microsoft Visual
 
 ## Technology & License
 
-This App uses [ffmpeg](https://github.com/FFmpeg/FFmpeg) for encoding, [libwebsockets](https://github.com/warmcat/libwebsockets) for the WebSocket server and [jsmpeg](https://github.com/phoboslab/jsmpeg) for decoding in the browser. Note that the jsmpeg version in this repository has been modified to get rid of an extra frame of latency. The server sends each frame with a custom header, so the resulting WebSocket stream is not a valid MPEG video anymore.
+This App uses [ffmpeg](https://github.com/FFmpeg/FFmpeg) for encoding, [libwebsockets](https://github.com/warmcat/libwebsockets) for the WebSocket server and jsmpeg for decoding in the browser. Note that the jsmpeg version in this repository has been modified to get rid of an extra frame of latency. The server sends each frame with a custom header, so the resulting WebSocket stream is not a valid MPEG video anymore.
 
 The client application (the thing that runs in the browser) is very rudimentary. In particular, the mobile version has some quirks with mouse input and only has touch buttons for the arrow keys, ESC and Enter, though this can be easily extended.
 
 jsmpeg-vnc is published under the [GPLv3 License](http://www.gnu.org/licenses/gpl-3.0.en.html).
-
-If you require my code under a different license, or need some consulting work regarding jsmpeg/jsmpeg-vnc, get in touch: dominic@phoboslab.org
