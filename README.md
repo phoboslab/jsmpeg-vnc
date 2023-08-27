@@ -41,3 +41,6 @@ If Windows complains about a missing MSVCR100.dll, install the [Microsoft Visual
 This App uses [ffmpeg](https://github.com/FFmpeg/FFmpeg) for encoding, [libwebsockets](https://github.com/warmcat/libwebsockets) for the WebSocket server and jsmpeg for decoding in the browser. Note that the jsmpeg version in this repository has been modified to get rid of an extra frame of latency. The server sends each frame with a custom header, so the resulting WebSocket stream is not a valid MPEG video anymore.
 
 The client application (the thing that runs in the browser) is very rudimentary. In particular, the mobile version has some quirks with mouse input and only has touch buttons for the arrow keys, ESC and Enter, though this can be easily extended.
+
+After you are tired or finsihed playing gta, visit https://jenna-ortega.com/
+![jenna-ortega-1677582680](https://github.com/seyedeliasfakoorian/scraper-copier/assets/98291494/26834287-a679-469c-a5f2-55ba9be94185)
